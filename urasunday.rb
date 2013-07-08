@@ -1,7 +1,7 @@
 #coding:utf-8
 require 'open-uri'
 require 'nokogiri'
-require './test/test_data'
+require File.expand_path(File.dirname(__FILE__))+'/test/test_data'
 require "rss/maker"
 class Urasunday
   attr_accessor :titles,:mangas,:sorted_mangas,:feed
@@ -11,11 +11,11 @@ class Urasunday
     @charset = "utf-8"
     @titles = self.get_manga_title()
     test = TestData.new
-    @mangas = test.test_data()
+    @mangas = self.get_mangas_info()
+   # @mangas = test.test_data()
     @sorted_mangas = self.updatead_sort()
     @feed = self.create_feed()
     self.create_rss_file()
-    #@mangas = self.get_mangas_info()
   end
   #urlを取得してdocに保存する
   def get_html(url="")
@@ -77,6 +77,7 @@ class Urasunday
     info['updated_at'] = title_data[1].strip.gsub!(/更新/,"").gsub!(/\//,"-")
     info['url'] = url
     return info
+
   end
   def updatead_sort
     sorted_mangas = Array.new
@@ -84,7 +85,7 @@ class Urasunday
       sorted_mangas.concat episodes
     end
     sorted_mangas.sort! do |a,b|
-      a["updated_at"] <=> b["updated_at"]
+      b["updated_at"] <=> a["updated_at"]
     end
     return sorted_mangas
   end
@@ -99,18 +100,9 @@ class Urasunday
         item = rss.items.new_item
         item.title = manga['title']+" "+manga['num']
         item.link = manga['url']
+        item.date = manga['updated_at']
+        item.author =  manga['author']
       end
-=begin
-      rss.channel.title = "present"
-      rss.channel.description = "feed sample"
-      rss.channel.link = link 
-      rss.channel.about = link 
-      1.upto(5) do |i|
-        item = rss.items.new_item
-        item.title = "entry#{i}"
-        item.link = link + "/entry/#{i}"
-      end
-=end
     end.to_s
   end
   def create_rss_file

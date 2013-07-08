@@ -1,6 +1,6 @@
 #coding:utf-8
 require 'rss'
-require './urasunday'
+require File.expand_path(File.dirname(__FILE__))+'/../urasunday'
 describe Urasunday, "掲載マンガのRSSを生成" do
   before :all do
     @urasunday = Urasunday.new
@@ -28,8 +28,8 @@ describe Urasunday, "掲載マンガのRSSを生成" do
   it "RSSで加工しやすいように、更新順の配列に変更" do
   mangas = @urasunday.sorted_mangas
     mangas.each_with_index do |manga,index|
-      expect(manga['updated_at']).to be >= mangas[index-1]['updated_at'] if mangas[index-1]['updated_at']&&index-1>=0
-      expect(manga['updated_at']).to be <= mangas[index+1]['updated_at'] if manga.class == Array&&mangas[index+1]['updated_at']
+      expect(manga['updated_at']).to be <= mangas[index-1]['updated_at'] if mangas[index-1]['updated_at']&&index-1>=0
+      expect(manga['updated_at']).to be >= mangas[index+1]['updated_at'] if manga.class == Array&&mangas[index+1]['updated_at']
     end
   end
   it "加工した情報をRSSに変更" do
