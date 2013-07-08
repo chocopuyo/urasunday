@@ -90,10 +90,10 @@ class Urasunday
     return sorted_mangas
   end
   def create_feed
-    link = "http://www.u.tsukuba.ac.jp/~s1321645/urasunday.xml"
+    link = "http://urasunday.chocopuyo.com/urasunday.rss"
     RSS::Maker.make("2.0") do |rss|
-      rss.channel.title = "裏サンデー"
-      rss.channel.description = "裏サンデーのRSSです"
+      rss.channel.title = "Urasunday"
+      rss.channel.description = "UrasundayRSS"
       rss.channel.link = link 
       rss.channel.about = link 
       @sorted_mangas.each do |manga|
